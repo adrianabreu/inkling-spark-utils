@@ -1,7 +1,7 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.types import (StructType, StructField, LongType, IntegerType, StringType)
-from inkling_spark_utils.dataframe import complete_dataframe, select_schema_columns, cast_dataframe
+from inklings_spark_utils.dataframe import complete_dataframe, select_schema_columns, cast_dataframe
 
 
 @pytest.fixture(scope='session')
@@ -43,15 +43,15 @@ def test_cast_dataframe(spark):
     )
 
     mockSchema = StructType([
-    StructField("id", IntegerType()),
+    StructField("id", LongType()),
     StructField("txt", StringType())
     ])
 
-    expected_schema = [("id", IntegerType()), ("txt", StringType())]
+    expected_schema = [StructField("id", LongType()), StructField("txt", StringType())]
 
     actual = [(x.name, x.dataType) for x in cast_dataframe(mockInput, mockSchema).schema.fields]
     
-    assert expected_schema == actual 
+    assert set([(x.name, x.dataType) for x in expected_schema]) == set(actual) 
 
 def test_select_schema_cols(spark):
     mockInput = spark.createDataFrame(
