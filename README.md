@@ -1,4 +1,4 @@
-# Inkling-Spark-Utils
+# Inklings-Spark-Utils
 
 "A.k.a. Infra-Nocturnal Kappa." - Hard-Boiled Wonderland (Haruki Murakami)
 

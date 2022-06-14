@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "inkling-spark-utils"
+name = "inklings-spark-utils"
 version = "0.0.0"
 description = ""
 authors = ["Adrian Abreu <adrianabreugonzalez@outlook.com>"]
