@@ -1,4 +1,4 @@
-from spark_utils import __version__
+from inkling_spark_utils import __version__
 
 
 def test_version():

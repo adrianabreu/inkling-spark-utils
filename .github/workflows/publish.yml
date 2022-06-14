@@ -1,15 +1,12 @@
-name: publish-to-pypi
-on:
-  push:
-    branches:
-      - master
+name: build-publish
+on: [push]
 jobs:
   ci:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7]
-        poetry-version: [1.1.4]
+        python-version: [3.9]
+        poetry-version: [1.1.13]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -32,6 +29,36 @@ jobs:
       - name: Build
         run: poetry build
       - name: Run tests
-        run: poetry run pytest
+        run: |-
+          poetry run pytest | tee tests.log
+          echo 'New stuff is here! :rocket:' >> $GITHUB_STEP_SUMMARY
+          echo 'Test results:' >> $GITHUB_STEP_SUMMARY
+          tail -1 output.log  | sed 's/=//g' >> $GITHUB_STEP_SUMMARY  
+      - name: Bump version
+        run: |-
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git fetch --all --tags
+          echo "Git completed"
+          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) 2> /dev/null) || true
+          echo "Tag assigned"
+          if [ -z "$latest_tag" ]; then
+            echo "Bump minor"
+            poetry version minor
+          else 
+            echo "Bump from last tag"
+            poetry version "$latest_tag"
+            poetry version minor
+          fi
+        if: ${{ github.ref == 'refs/heads/master' }}
+      - name: Generate tag
+        run: |-
+          tag=$(poetry version | cut -d " " -f2)
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git tag -a "$tag" -m "Release $tag"
+          git push --tags
+        if: ${{ github.ref == 'refs/heads/master' }}  
       - name: Publish to pipy
-        run: poetry publish
+        run: poetry publish --build
+        if: ${{ github.ref == 'refs/heads/master' }}

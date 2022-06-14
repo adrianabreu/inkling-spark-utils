@@ -1,7 +1,7 @@
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.types import (StructType, StructField, LongType, IntegerType, StringType)
-from spark_utils.dataframe import complete_dataframe, select_schema_columns, cast_dataframe
+from inkling_spark_utils.dataframe import complete_dataframe, select_schema_columns, cast_dataframe
 
 
 @pytest.fixture(scope='session')

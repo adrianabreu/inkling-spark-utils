@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "spark-utils"
-version = "0.1.0"
+name = "inkling-spark-utils"
+version = "0.0.0"
 description = ""
-authors = ["Adrian Abreu <aabreu@countergrogwise.com>"]
+authors = ["Adrian Abreu <adrianabreugonzalez@outlook.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
